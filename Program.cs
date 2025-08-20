@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-//using TodoListApp.Data;
-
+using TodoListApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-//builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddSingleton<ITodoService, TodoService>();
 
 var app = builder.Build();
 

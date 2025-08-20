@@ -7,7 +7,7 @@ namespace TodoListApp.Services
     public interface ITodoService
     {
 
-        Task<IReadOnlyList<TodoItem>> GetAllAsyn();
+        Task<IReadOnlyList<TodoItem>> GetAllAsync();
         Task<TodoItem> AddAsync(string Title);
 
 
