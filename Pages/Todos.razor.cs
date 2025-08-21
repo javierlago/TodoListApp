@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using TodoListApp.Models;
 using TodoListApp.Services;
 
 
 
-namespace TodoList.Pages
+namespace TodoListApp.Pages
 {
 
     public partial class Todos : ComponentBase
@@ -12,10 +12,21 @@ namespace TodoList.Pages
         [Inject]
         private ITodoService TodoService { get; set; } = default!;
         protected IReadOnlyList<TodoItem> Items { get; private set; } = Array.Empty<TodoItem>();
+        
         protected override async Task OnInitializedAsync()
         {
             Items = await TodoService.GetAllAsync();
 
+        }
+
+        private TodoItem newItem = new();
+
+        private async Task AddTodo() {
+
+            await TodoService.AddAsync(newItem.Title);
+            newItem = new TodoItem();
+            Items = await TodoService.GetAllAsync();
+        
         }
 
     }

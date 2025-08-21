@@ -1,3 +1,28 @@
-@page "/todos"
-<h1>Tareas</h1>
-<p>Construiremos aqu� nuestra ToDo List paso a paso</p>
+﻿@page "/todos"
+
+<h3>Lista de Tareas</h3>
+
+@if (Items == null || !Items.Any())
+{
+    <p>No hay tareas aún.</p>
+}
+else
+{
+    <ul>
+        @foreach (var item in Items)
+        {
+            <li>@item.Title (@(item.IsDone ? "Hecha" : "Pendiente"))</li>
+        }
+    </ul>
+}
+<EditForm Model="@newItem" OnValidSubmit="AddTodo">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Título de la tarea:</label>
+        <InputText class="form-control" @bind-Value="newItem.Title" />
+        <ValidationMessage For="@(() => newItem.Title)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Añadir tarea</button>
+</EditForm>
