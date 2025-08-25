@@ -9,7 +9,8 @@ namespace TodoListApp.Services
 
         Task<IReadOnlyList<TodoItem>> GetAllAsync();
         Task<TodoItem> AddAsync(string Title);
-
+        Task ToggleDoneAsync(int id);
+        Task DeleteAsync(int id);
 
     }
 }

@@ -32,5 +32,19 @@ namespace TodoListApp.Services
             _items.TryAdd(item.Id, item);
             return Task.FromResult(item);
         }
+
+        public Task ToggleDoneAsync(int id) {
+            if (_items.TryGetValue(id, out var item)) { 
+                item.IsDone = !item.IsDone;
+            
+            }
+            return Task.CompletedTask;
+        }
+
+        public Task DeleteAsync(int id) {
+            _items.TryRemove(id, out _);
+            return Task.CompletedTask;
+
+        }
     }
 }

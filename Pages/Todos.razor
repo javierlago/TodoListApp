@@ -9,11 +9,22 @@
 else
 {
     <ul>
-        @foreach (var item in Items)
-        {
-            <li>@item.Title (@(item.IsDone ? "Hecha" : "Pendiente"))</li>
-        }
-    </ul>
+    @foreach (var item in Items)
+    {
+        <li>
+            <input type="checkbox"
+                   checked="@item.IsDone"
+                   @onchange="@((ChangeEventArgs e) => ToggleDone(item.Id))" />
+            @item.Title (@(item.IsDone ? "Hecha" : "Pendiente"))
+
+            <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteTodo(item.Id)">
+                Eliminar
+            </button>
+
+        </li>
+    }
+</ul>
+
 }
 <EditForm Model="@newItem" OnValidSubmit="AddTodo">
     <DataAnnotationsValidator />
