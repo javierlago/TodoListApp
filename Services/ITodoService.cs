@@ -11,6 +11,8 @@ namespace TodoListApp.Services
         Task<TodoItem> AddAsync(string Title);
         Task ToggleDoneAsync(int id);
         Task DeleteAsync(int id);
+        Task UpdateTitleAsync(int id, string Title);
+        
 
     }
 }

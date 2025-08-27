@@ -1,6 +1,7 @@
 ﻿@page "/todos"
 
 <h3>Lista de Tareas</h3>
+<p>Tareas pendientes: @PendingCount</p>
 
 @if (Items == null || !Items.Any())
 {
@@ -8,22 +9,64 @@
 }
 else
 {
-    <ul>
-    @foreach (var item in Items)
+<div class="mb-3">
+    <button class="btn btn-sm @(currentFilter == ViewFilter.All ? "btn-primary" : "btn-outline-primary")"
+            @onclick="() => currentFilter = ViewFilter.All">
+        Todas
+    </button>
+
+    <button class="btn btn-sm @(currentFilter == ViewFilter.Active ? "btn-primary" : "btn-outline-primary")"
+            @onclick="() => currentFilter = ViewFilter.Active">
+        Pendientes
+    </button>
+
+    <button class="btn btn-sm @(currentFilter == ViewFilter.Completed ? "btn-primary" : "btn-outline-primary")"
+            @onclick="() => currentFilter = ViewFilter.Completed">
+        Hechas
+    </button>
+</div>
+
+
+
+
+
+<ul>
+    @foreach (var item in GetFilteredItems())
     {
         <li>
             <input type="checkbox"
                    checked="@item.IsDone"
-                   @onchange="@((ChangeEventArgs e) => ToggleDone(item.Id))" />
-            @item.Title (@(item.IsDone ? "Hecha" : "Pendiente"))
+                   @onchange="@(() => ToggleDone(item.Id))" />
 
-            <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteTodo(item.Id)">
-                Eliminar
-            </button>
-
+            @if (editingId == item.Id)
+            {
+                <InputText class="form-control d-inline w-auto"
+                           @bind-Value="editedTitle" />
+                <button class="btn btn-sm btn-success ms-2"
+                        @onclick="@(() => SaveEdit(item.Id))">
+                    Guardar
+                </button>
+                <button class="btn btn-sm btn-secondary ms-1"
+                        @onclick="CancelEdit">
+                    Cancelar
+                </button>
+            }
+            else
+            {
+                @item.Title <span>(@((item.IsDone ? "Hecha" : "Pendiente")))</span>
+                <button class="btn btn-sm btn-warning ms-2"
+                        @onclick="@(() => StartEdit(item))">
+                    Editar
+                </button>
+                <button class="btn btn-sm btn-danger ms-1"
+                        @onclick="@(() => DeleteTodo(item.Id))">
+                    Eliminar
+                </button>
+            }
         </li>
     }
 </ul>
+
 
 }
 <EditForm Model="@newItem" OnValidSubmit="AddTodo">

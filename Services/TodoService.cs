@@ -46,5 +46,14 @@ namespace TodoListApp.Services
             return Task.CompletedTask;
 
         }
+        public Task UpdateTitleAsync(int id, string newTitle) { 
+        
+            if(_items.TryGetValue(id, out var item)) {
+                item.Title = newTitle.Trim(); }
+        
+            return Task.CompletedTask;
+        }
+
+
     }
 }
