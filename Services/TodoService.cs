@@ -7,7 +7,7 @@ namespace TodoListApp.Services
     {
         // Almacén en memoria (thread-safe)
         private readonly ConcurrentDictionary<int, TodoItem> _items = new();
-        private int _nextId = 1;
+        private int _nextId = 0;
 
         public Task<IReadOnlyList<TodoItem>> GetAllAsync()
         {
@@ -33,26 +33,49 @@ namespace TodoListApp.Services
             return Task.FromResult(item);
         }
 
-        public Task ToggleDoneAsync(int id) {
-            if (_items.TryGetValue(id, out var item)) { 
+        public Task ToggleDoneAsync(int id)
+        {
+            if (_items.TryGetValue(id, out var item))
+            {
                 item.IsDone = !item.IsDone;
-            
+
             }
             return Task.CompletedTask;
         }
 
-        public Task DeleteAsync(int id) {
+        public Task DeleteAsync(int id)
+        {
             _items.TryRemove(id, out _);
             return Task.CompletedTask;
 
         }
-        public Task UpdateTitleAsync(int id, string newTitle) { 
-        
-            if(_items.TryGetValue(id, out var item)) {
-                item.Title = newTitle.Trim(); }
-        
+        public Task UpdateTitleAsync(int id, string newTitle)
+        {
+
+            if (_items.TryGetValue(id, out var item))
+            {
+                item.Title = newTitle.Trim();
+            }
+
             return Task.CompletedTask;
         }
+        public Task<int> DeleteCompletedAsync()
+        {
+            int removed = 0;
+            
+            // Tomamos un "snapshot" a array para evitar "collection modified" mientras iteramos
+            foreach (var kvp in _items.ToArray())
+            {
+                if (kvp.Value.IsDone)
+                {
+                    if (_items.TryRemove(kvp.Key, out _))
+                        removed++;
+                }
+            }
+
+            return Task.FromResult(removed);
+        }
+
 
 
     }

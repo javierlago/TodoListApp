@@ -12,7 +12,7 @@ namespace TodoListApp.Services
         Task ToggleDoneAsync(int id);
         Task DeleteAsync(int id);
         Task UpdateTitleAsync(int id, string Title);
-        
+        Task<int> DeleteCompletedAsync();
 
     }
 }

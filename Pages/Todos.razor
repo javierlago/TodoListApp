@@ -24,14 +24,22 @@ else
             @onclick="() => currentFilter = ViewFilter.Completed">
         Hechas
     </button>
+
+
+
 </div>
 
 
 
+<button class="btn btn-outline-danger"
+        @onclick="ClearCompletedAsync"
+        disabled="@(Items == null || !HasCompleted)">
+    Limpiar completadas
+</button>
 
 
 <ul>
-    @foreach (var item in GetFilteredItems())
+    @foreach (var item in GetViewItems())
     {
         <li>
             <input type="checkbox"

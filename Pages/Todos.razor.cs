@@ -18,6 +18,9 @@ namespace TodoListApp.Pages
         private int PendingCount => Items?.Count(t => !t.IsDone) ?? 0;
         private enum ViewFilter {All,Active,Completed }
         private ViewFilter currentFilter = ViewFilter.All;
+        private bool HasCompleted => Items?.Any(t => t.IsDone) ?? false;
+        private enum SortOrder { NewestFirst,OldestFirst}
+        private SortOrder currentOrder = SortOrder.NewestFirst;
 
 
         private IEnumerable<TodoItem> GetFilteredItems() { 
@@ -28,13 +31,7 @@ namespace TodoListApp.Pages
                 ViewFilter.Completed => Items.Where(t => t.IsDone),
                 _ => Items
 
-
             };
-        
-        
-        
-        
-        
         }
 
 
@@ -93,6 +90,35 @@ namespace TodoListApp.Pages
             editedTitle = string.Empty;
         
         }
+
+        private async Task ClearCompletedAsync()
+        {
+            var removed = await TodoService.DeleteCompletedAsync();
+            Items = await TodoService.GetAllAsync();
+
+            // (Opcional) aquí podrías mostrar un mensaje con 'removed'
+            // p.ej. usar un sistema de notificaciones si lo tienes
+        }
+        private void ToggleSortOrder() 
+        {
+            currentOrder = currentOrder == SortOrder.NewestFirst
+                ? SortOrder.NewestFirst
+                : SortOrder.OldestFirst;
+        
+        
+        }
+
+        private IEnumerable<TodoItem> GetViewItems()
+        {
+            var query = GetFilteredItems(); // 👈 tu método existente
+
+            return currentOrder == SortOrder.NewestFirst
+                ? query.OrderByDescending(t => t.CreatedAt)
+                : query.OrderBy(t => t.CreatedAt);
+        }
+
+
+
 
 
     }
