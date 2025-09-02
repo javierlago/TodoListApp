@@ -21,7 +21,17 @@ namespace TodoListApp.Pages
         private bool HasCompleted => Items?.Any(t => t.IsDone) ?? false;
         private enum SortOrder { NewestFirst,OldestFirst}
         private SortOrder currentOrder = SortOrder.NewestFirst;
+        // === Feedback state ===
+        private string feedbackText = string.Empty;
+        private string feedbackType = "info";       // "success", "danger", "warning", "info"
+        private int feedbackAutoHideMs = 3000;
 
+        // Se llama cuando el componente se cierra o se autohide
+        private void HandleFeedbackClosed()
+        {
+            feedbackText = string.Empty;            // oculta el bloque en el markup
+            StateHasChanged();
+        }
 
         private IEnumerable<TodoItem> GetFilteredItems() { 
             if(Items is null) return Enumerable.Empty<TodoItem>();
@@ -51,6 +61,11 @@ namespace TodoListApp.Pages
             await TodoService.AddAsync(newItem.Title);
             newItem = new TodoItem();
             Items = await TodoService.GetAllAsync();
+            // Mostrar mensaje de éxito
+            feedbackText = "✅ Tarea añadida correctamente.";
+            feedbackType = "success";
+            feedbackAutoHideMs = 3000;
+
 
         }
         private async Task ToggleDone(int id)
@@ -63,6 +78,9 @@ namespace TodoListApp.Pages
         {
             await TodoService.DeleteAsync(id);
             Items = await TodoService.GetAllAsync();
+            feedbackText = "🗑️ Tarea eliminada correctamente.";
+            feedbackType = "info";
+            feedbackAutoHideMs = 3000;
         }
         private void StartEdit(TodoItem item)
         {
@@ -79,6 +97,10 @@ namespace TodoListApp.Pages
                 editingId = null;
                 editedTitle = string.Empty;
                 Items = await TodoService.GetAllAsync();
+                // Mostrar mensaje de éxito
+                feedbackText = "✏️ Tarea editada correctamente.";
+                feedbackType = "info";
+                feedbackAutoHideMs = 3000;
 
             }
 
@@ -95,9 +117,12 @@ namespace TodoListApp.Pages
         {
             var removed = await TodoService.DeleteCompletedAsync();
             Items = await TodoService.GetAllAsync();
+            // Mostrar mensaje de éxito
+            feedbackText = "🧹 Tareas completadas eliminadas.";
+            feedbackType = "info";
+            feedbackAutoHideMs = 3000;
 
-            // (Opcional) aquí podrías mostrar un mensaje con 'removed'
-            // p.ej. usar un sistema de notificaciones si lo tienes
+
         }
         private void ToggleSortOrder() 
         {

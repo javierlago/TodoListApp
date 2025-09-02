@@ -1,5 +1,13 @@
 ﻿@page "/todos"
 
+@* —— Feedback placeholder —— *@
+@if (!string.IsNullOrWhiteSpace(feedbackText))
+{
+    <Feedback Text="@feedbackText"
+              Type="@feedbackType"
+              AutoHideMs="@feedbackAutoHideMs"
+              OnClosed="HandleFeedbackClosed" />
+}
 
 <h3>Lista de Tareas</h3>
 <p>Tareas pendientes: @PendingCount</p>
