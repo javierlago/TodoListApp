@@ -9,7 +9,9 @@
               OnClosed="HandleFeedbackClosed" />
 }
 
-<h3>Lista de Tareas</h3>
+<div class="container mt-4">
+    <h3 class="mb-4">Lista de Tareas</h3>
+</div>
 <p>Tareas pendientes: @PendingCount</p>
 
 @if (Items == null || !Items.Any())
@@ -18,7 +20,7 @@
 }
 else
 {
-<div class="mb-3">
+<div class="container mt-4">
     <button class="btn btn-sm @(currentFilter == ViewFilter.All ? "btn-primary" : "btn-outline-primary")"
             @onclick="() => currentFilter = ViewFilter.All">
         Todas
@@ -47,53 +49,84 @@ else
 </button>
 
 
-<ul>
+
+
+<div class="todo-grid">
     @foreach (var item in GetViewItems())
     {
-        <li>
-            <input type="checkbox"
-                   checked="@item.IsDone"
-                   @onchange="@(() => ToggleDone(item.Id))" />
+        <div class="todo-card">
+            <div class="todo-card-header">
+                @item.Title
+            </div>
 
-            @if (editingId == item.Id)
-            {
-                <InputText class="form-control d-inline w-auto"
-                           @bind-Value="editedTitle" />
-                <button class="btn btn-sm btn-success ms-2"
-                        @onclick="@(() => SaveEdit(item.Id))">
-                    Guardar
-                </button>
-                <button class="btn btn-sm btn-secondary ms-1"
-                        @onclick="CancelEdit">
-                    Cancelar
-                </button>
-            }
-            else
-            {
-                @item.Title <span>(@((item.IsDone ? "Hecha" : "Pendiente")))</span>
-                <button class="btn btn-sm btn-warning ms-2"
-                        @onclick="@(() => StartEdit(item))">
-                    Editar
-                </button>
-                <button class="btn btn-sm btn-danger ms-1"
-                        @onclick="@(() => DeleteTodo(item.Id))">
-                    Eliminar
-                </button>
-            }
-        </li>
+            <div class="todo-card-body">
+                @if (editingId == item.Id)
+                {
+                    <InputText class="form-control"
+                               @bind-Value="editedTitle" />
+                    <div class="mt-2">
+                        <button class="btn btn-success btn-sm me-2"
+                                @onclick="@(() => SaveEdit(item.Id))">
+                            Guardar
+                        </button>
+                        <button class="btn btn-secondary btn-sm"
+                                @onclick="CancelEdit">
+                            Cancelar
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <label class="todo-checkbox">
+                        <input type="checkbox"
+                               checked="@item.IsDone"
+                               @onchange="@(() => ToggleDone(item.Id))" />
+                        <span class="ms-2">
+                            @(item.IsDone ? "Realizada" : "Pendiente")
+                        </span>
+                    </label>
+
+                    <div class="todo-actions mt-3">
+                        <button class="btn-delete me-2"
+                                @onclick="@(() => DeleteTodo(item.Id))">
+                            Eliminar
+                        </button>
+                        <button class="btn-edit"
+                                @onclick="@(() => StartEdit(item))">
+                            Editar
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
     }
-</ul>
+</div>
+
+
 
 
 }
-<EditForm Model="@newItem" OnValidSubmit="AddTodo">
-    <DataAnnotationsValidator />
-
-    <div class="mb-3">
-        <label>Título de la tarea:</label>
-        <InputText class="form-control" @bind-Value="newItem.Title" />
-        <ValidationMessage For="@(() => newItem.Title)" />
+<div class="todo-card mb-4">
+    <div class="todo-card-header">
+        Nueva tarea
     </div>
 
-    <button type="submit" class="btn btn-primary">Añadir tarea</button>
-</EditForm>
+    <div class="todo-card-body">
+        <EditForm Model="@newItem" OnValidSubmit="AddTodo">
+            <DataAnnotationsValidator />
+
+            <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2">
+                <div>
+                    <label class="form-label mb-1">Título</label>
+                    <InputText class="form-control" @bind-Value="newItem.Title" />
+                    <ValidationMessage For="@(() => newItem.Title)" />
+                </div>
+
+                <button type="submit" class="btn btn-primary align-self-end">
+                    Añadir
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+

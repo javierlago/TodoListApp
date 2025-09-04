@@ -62,3 +62,70 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+
+.todo-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.todo-card {
+    width: 240px;
+    border: 2px solid #000;
+    border-radius: 1rem;
+    box-shadow: 2px 2px 0 #000;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.todo-card-header {
+    background-color: #b4f3b4;
+    padding: 1rem;
+    font-size: 1.2rem;
+    text-align: center;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    font-weight: bold;
+}
+
+.todo-card-body {
+    padding: 1rem;
+    flex: 1;
+}
+
+.todo-checkbox {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+    .todo-checkbox input[type="checkbox"] {
+        width: 1.2rem;
+        height: 1.2rem;
+        accent-color: #666;
+    }
+
+.todo-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-delete {
+    background-color: #fdd;
+    border: 2px solid #000;
+    border-radius: 0.5rem;
+    padding: 0.3rem 0.8rem;
+    font-weight: bold;
+}
+
+.btn-edit {
+    background-color: #ffeaa7;
+    border: 2px solid #000;
+    border-radius: 0.5rem;
+    padding: 0.3rem 0.8rem;
+    font-weight: bold;
+}
